@@ -23,7 +23,7 @@ export default function EstadisticaPage() {
               </div>
             </TabPanel>
 
-            {/* <TabPanel header="📋 Diagrama Gantt ">
+            {/* <TabPanel header="📋 Diagrama SIGEDEP ">
               <div className="p-4 fade-in">
                 <Estadistica3 />
               </div>

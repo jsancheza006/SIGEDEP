@@ -10,7 +10,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gantt 2.0",
+  title: "SIGEDEP",
   description: "Sistema de gestión de convenios en trámite.",
   icons: { icon: "/favicon.png" },
 };

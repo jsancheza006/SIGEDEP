@@ -81,7 +81,7 @@ export default function Estadistica3() {
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold text-gray-700 mb-4">📊 Diagrama Gantt - Progresión de Convenios</h1>
+      <h1 className="text-2xl font-bold text-gray-700 mb-4">📊 Diagrama SIGEDEP - Progresión de Convenios</h1>
 
       {/*  Asegurar que el contenedor del Timeline tenga tamaño definido */}
       <div ref={timelineRef} className="w-full h-[500px] border border-gray-300 rounded-lg"></div>

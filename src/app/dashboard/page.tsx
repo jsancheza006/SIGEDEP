@@ -44,10 +44,10 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
           >
             <h1 className="text-3xl font-bold text-[#172951] mb-4 flex items-center">
-              <FaClipboardList className="mr-3 text-[#CDA95F]" /> Bienvenido a Gantt 2.0
+              <FaClipboardList className="mr-3 text-[#CDA95F]" /> Bienvenido a SIGEDEP
             </h1>
             <p className="text-gray-700">
-              Gantt 2.0 es una herramienta de gestión de convenios de cooperación que permite realizar un seguimiento estructurado
+              SIGEDEP es una herramienta de gestión de convenios de cooperación que permite realizar un seguimiento estructurado
               de los procesos desde la negociación inicial hasta la firma y custodia del convenio.
             </p>
           </motion.section>
@@ -58,7 +58,7 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
           >
             <h2 className="text-2xl font-semibold text-[#172951] mb-4 flex items-center">
-              <FaFileAlt className="mr-3 text-[#CDA95F]" /> GANTT 2025 - Fases del Macroproceso de Convenios
+              <FaFileAlt className="mr-3 text-[#CDA95F]" /> SIGEDEP 2025 - Fases del Macroproceso de Convenios
             </h2>
             <Accordion>
               <AccordionTab header="FASE 1. Negociación y gestiones iniciales">
@@ -109,9 +109,9 @@ export default function Home() {
             <FaBook className="mr-3 text-[#CDA95F]" /> Documentación
           </h2>
           <p className="text-gray-700">
-            Encuentra aquí la documentación detallada sobre cómo usar Gantt 2.0 y gestionar tus convenios de manera eficiente.
+            Encuentra aquí la documentación detallada sobre cómo usar SIGEDEP y gestionar tus convenios de manera eficiente.
           </p>
-          <Link href="/Documentacion_Gantt_2.pdf" download>
+          <Link href="/Documentacion_SIGEDEP_2.pdf" download>
             <Button
               label="Ir a la Documentación"
               icon="pi pi-download"
