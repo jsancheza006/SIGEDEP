@@ -21,7 +21,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex justify-between items-center py-2 px-4  bg-[#12142B] border-none shadow-md">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center py-2 px-4 bg-[#12142B] border-none shadow-md">
       {/* Sección Izquierda: Menú y Logo */}
       <div className="flex items-center space-x-2">
         {hydrated && isAuthenticated && (
