@@ -35,7 +35,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}login/`, {
+      const response = await fetch(`${API_BASE}login/index.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: email, contrasena }),
@@ -69,74 +69,113 @@ export default function Login() {
 
   return (
     <>
+    
       {/* Header sin botón de menú */}
-      <header className="flex justify-between items-center py-2 px-4 bg-[#172951] border-b shadow-md">
+      <header className="flex justify-between items-center py-2 px-4  bg-[#12142B] border-none shadow-md">
         <div className="flex items-center space-x-3">
           <Image
             src="/Logo_mep-DORADO.png"
             alt="Ministerio de Educación Pública"
-            width={220}
-            height={60}
-            priority
+            width={385}
+            height={106}
+            priority 
           />
         </div>
       </header>
 
       {/* Formulario de Login */}
-      <div className="flex justify-center items-start min-h-screen bg-[#f4f4f4] pt-24">
-        <Toast ref={toast} />
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#12142B] to-[#1A1F47] pt-4 px-2 gap-1">
+          <Toast ref={toast} />
 
-        <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold text-center text-[#172951] mb-6">
-            Iniciar Sesión
-          </h2>
+          {/* Cuadro Izquierdo */}
+          <div className="bg-white p-8 rounded-xl shadow-lg w-[792px] h-[900px] flex flex-col items-start gap-3 ">
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-sm text-gray-700 font-semibold mb-1">
-                Correo Electrónico
-              </label>
-              <InputText
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="usuario@mep.go.cr"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                required
+
+            <div className="flex-1 w-full p-[60px] pb-2 flex flex-col items-start gap-4">
+              <img
+                src="/favicon.png"
+                alt="Logo"
+                width={106}
+                height={99}
+                className="block"
               />
+              <h2 className="text-2xl font-bold text-[#172951]">Bienvenido a SIGEDEP</h2>
+              <p className="text-gray-700 leading-relaxed font-extralight italic">
+                Bienvenido a SIGEDEP, la plataforma del MEP diseñada para optimizar y centralizar los procesos de la Dirección de Educación Privada.
+              </p>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-700 font-semibold mb-1">
-                Contraseña
-              </label>
-              <Password
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-                feedback={false}
-                toggleMask
-                placeholder="********"
-                inputClassName="w-full p-2 border border-gray-300 rounded-lg"
-                className="w-full"
-                required
-              />
+            <div className=" flex-1 w-full  py-[10px] px-[60px]">
+              <form onSubmit={handleLogin} className="space-y-5">
+                <div>
+                  <label className="block text-sm text-[#172951] font-semibold mb-1 leading-5">
+                    Correo Electrónico
+                  </label>
+                  <InputText
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="usuario@mep.go.cr"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="flex text-sm text-[#172951] font-semibold mb-1 leading-5">
+                    Contraseña
+                  </label>
+                  <Password
+                    value={contrasena}
+                    onChange={(e) => setContrasena(e.target.value)}
+                    feedback={false}
+                    toggleMask
+                    placeholder="********"
+                    inputClassName="w-full p-2 border border-gray-300 rounded-lg"
+                    className="w-full !block"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  label={loading ? "Ingresando..." : "Ingresar"}
+                  className="w-full h-[50px] bg-[#1d3466] text-white py-2 rounded-lg hover:bg-[#1A1F47] transition-all duration-300 font-semibold "
+                  disabled={loading}
+                />
+
+                {loading && (
+                  <div className="flex justify-center mt-2">
+                    <ProgressSpinner />
+                  </div>
+                )}
+              </form>
             </div>
 
-            <Button
-              type="submit"
-              label={loading ? "Ingresando..." : "Ingresar"}
-              className="w-full bg-[#172951] text-white py-2 rounded-lg hover:bg-[#CDA95F] transition-all duration-300 font-semibold"
-              disabled={loading}
-            />
 
-            {loading && (
-              <div className="flex justify-center mt-2">
-                <ProgressSpinner />
-              </div>
-            )}
-          </form>
-        </div>
+          </div>
+
+
+
+
+          {/* Cuadro Derecho */}
+          <div className=" bg-gradient-to-b from-[#F5E6C5] via-[#C2A869] via-[#A2874E] to-[#4E3B1A] p-8 rounded-xl shadow-lg w-[601px] h-[900px] flex justify-center    items-center">
+            {/* Contenido del cuadro izquierdo */}
+
+            <img 
+              src="costa-rica.svg"
+              alt="costa-rica" />
+              
+          </div>
+
+
+
+                
+
+          
+
       </div>
+
     </>
   );
 }
