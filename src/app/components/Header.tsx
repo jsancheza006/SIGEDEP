@@ -21,7 +21,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex justify-between items-center py-2 px-4 bg-[#172951] border-b shadow-md z-50">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center py-2 px-4 bg-[#12142B] border-none shadow-md">
       {/* Sección Izquierda: Menú y Logo */}
       <div className="flex items-center space-x-2">
         {hydrated && isAuthenticated && (
@@ -34,8 +34,8 @@ export default function Header() {
         <Image
           src="/Logo_mep-DORADO.png"
           alt="Ministerio de Educación Pública"
-          width={220}
-          height={60}
+          width={385}
+          height={105}
           priority
           className="cursor-pointer"
           onClick={() => router.push("/dashboard")}
@@ -47,7 +47,7 @@ export default function Header() {
         <div className="relative">
           <Button
             icon="pi pi-user"
-            className="p-button-text text-white text-xl hover:text-blue-300 transition-all duration-300"
+            className="p-button-text text-white text-xl hover:text-[#C2A869] transition-all duration-300"
             onClick={(e) => menuRef.current?.toggle(e)}
           />
           <Menu
