@@ -38,7 +38,7 @@ export default function Login() {
       const response = await fetch(`${API_BASE}login/index.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo: email, contrasena }),
+        body: JSON.stringify({ Correo: email, Contrasena: contrasena }),
       });
 
       const data = await response.json();
