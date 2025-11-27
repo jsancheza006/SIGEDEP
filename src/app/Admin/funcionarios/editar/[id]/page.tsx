@@ -11,6 +11,11 @@ import {
   Save,
   User,
 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+
+// Marca esta ruta como dinámica
+export const dynamic = 'force-dynamic';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +35,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import { API_BASE } from "@/utils/api";
 
 const funcionarioSchema = z.object({
   cedula: z.string().min(1, "Cédula es requerida"),
@@ -37,12 +43,16 @@ const funcionarioSchema = z.object({
   apellidos: z.string().min(1, "Apellidos son requeridos"),
   correo: z.string().email("Correo electrónico inválido"),
   telefono: z.string().min(1, "Teléfono es requerido"),
-  contrasena: z.string().min(6, "Contraseña debe tener al menos 6 caracteres"),
+  contrasena: z.string().optional(),
 });
 
 type FuncionarioFormValues = z.infer<typeof funcionarioSchema>;
 
-function FormularioFuncionario() {
+function EditarFuncionarioForm({ id }: { id: string }) {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const form = useForm<FuncionarioFormValues>({
     resolver: zodResolver(funcionarioSchema),
     defaultValues: {
@@ -55,23 +65,126 @@ function FormularioFuncionario() {
     },
   });
 
-  function onSubmit(data: FuncionarioFormValues) {
-    console.log(data);
-    toast({
-      title: "Funcionario Guardado",
-      description: "El nuevo funcionario ha sido registrado exitosamente.",
-    });
-    form.reset();
+  useEffect(() => {
+    cargarDatosFuncionario();
+  }, [id]);
+
+  const cargarDatosFuncionario = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_BASE}Funcionario/index.php?id=${id}`);
+      const data = await response.json();
+
+      if (data && data.ID_Funcionario) {
+        form.reset({
+          cedula: String(data.ID_Funcionario),
+          nombre: data.Nombre,
+          apellidos: data.Apellido,
+          correo: data.Correo,
+          telefono: String(data.Numero),
+          contrasena: "",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "No se encontró el funcionario",
+          variant: "destructive",
+        });
+        router.push("/Admin/funcionarios");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los datos del funcionario",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  async function onSubmit(data: FuncionarioFormValues) {
+    setIsSubmitting(true);
+    
+    try {
+      const payload: any = {
+        Nombre: data.nombre,
+        Apellido: data.apellidos,
+        Correo: data.correo,
+        Numero: data.telefono,
+      };
+
+      // Solo incluir contraseña si se proporcionó una nueva
+      if (data.contrasena && data.contrasena.length > 0) {
+        payload.Contrasena = data.contrasena;
+      }
+
+      const response = await fetch(`${API_BASE}Funcionario/index.php?id=${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // Lee la respuesta como texto primero
+      const responseText = await response.text();
+      
+      // Intenta parsear como JSON
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        console.error("Respuesta del servidor:", responseText);
+        throw new Error("El servidor no devolvió un JSON válido.");
+      }
+
+      // La API retorna {message: "..."} en éxito o {error: "..."} en error
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      if (result.message) {
+        toast({
+          title: "Funcionario Actualizado",
+          description: result.message,
+        });
+        router.push("/Admin/funcionarios");
+      } else {
+        throw new Error("Respuesta inesperada del servidor");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "No se pudo actualizar el funcionario.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Cargando datos del funcionario...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
         <CardTitle className="text-2xl">
-          Insertar Nuevo Funcionario
+          Editar Funcionario
         </CardTitle>
         <CardDescription>
-          Rellene los campos para registrar un nuevo funcionario.
+          Modifique los campos necesarios. Deje la contraseña en blanco si no desea cambiarla.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -90,7 +203,8 @@ function FormularioFuncionario() {
                         <Input
                           placeholder="Ej: 1-2345-6789"
                           {...field}
-                          className="pl-10"
+                          className="pl-10 bg-gray-100"
+                          disabled
                         />
                       </div>
                     </FormControl>
@@ -190,13 +304,13 @@ function FormularioFuncionario() {
                 name="contrasena"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contraseña</FormLabel>
+                    <FormLabel>Nueva Contraseña (opcional)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                           type="password"
-                          placeholder="********"
+                          placeholder="Dejar en blanco para mantener la actual"
                           {...field}
                           className="pl-10"
                         />
@@ -208,10 +322,17 @@ function FormularioFuncionario() {
               />
             </div>
 
-            <div className="flex justify-end">
-              <Button type="submit">
+            <div className="flex justify-between">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/Admin/funcionarios")}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
                 <Save className="mr-2 h-4 w-4" />
-                Guardar Funcionario
+                {isSubmitting ? "Guardando..." : "Guardar Cambios"}
               </Button>
             </div>
           </form>
@@ -221,11 +342,22 @@ function FormularioFuncionario() {
   );
 }
 
+export default function EditarFuncionarioPage() {
+  const params = useParams();
+  const id = params.id as string;
 
-export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4">
-      <FormularioFuncionario />
+    <main className="flex min-h-screen flex-col items-center justify-start bg-gray-50 p-8">
+      <div className="w-full max-w-4xl mb-6">
+        <a 
+          href="/Admin/funcionarios" 
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-4"
+        >
+          <i className="pi pi-arrow-left mr-2"></i>
+          Volver a Lista de Funcionarios
+        </a>
+      </div>
+      <EditarFuncionarioForm id={id} />
     </main>
   );
 }

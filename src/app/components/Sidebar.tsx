@@ -3,16 +3,22 @@
 import { useSidebar } from "../context/SidebarContext";
 import { Sidebar as PrimeSidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function Sidebar() {
+interface SidebarProps {
+  isAdmin?: boolean;
+}
+
+export default function Sidebar({ isAdmin = false }: SidebarProps) {
   const { isSidebarVisible, setSidebarVisible } = useSidebar();
   const router = useRouter();
+  const pathname = usePathname();
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
-  const navItems = [
+  // Menú para usuarios normales
+  const userNavItems = [
     {
       label: "Inicio",
       href: "/dashboard",
@@ -36,28 +42,41 @@ export default function Sidebar() {
         { label: "Ver Resultados", href: "/dashboard/analisis/estadisticas" },
       ],
     },
-
-    /*{
-      label: "Ver Convenios",
-      href: "/dashboard/convenios",
-      icon: "pi pi-list",
-    },
-    {
-      label: "Proyectos",
-      href: "/dashboard/proyectos",
-      icon: "pi pi-briefcase",
-    },
-    {
-      label: "Inventario",
-      href: "/dashboard/inventario",
-      icon: "pi pi-folder",
-    },
-    {
-      label: "Ver Estadísticas",
-      href: "/dashboard/estadistica",
-      icon: "pi pi-chart-bar",
-    },*/
   ];
+
+  // Menú para administradores
+  const adminNavItems = [
+    {
+      label: "Dashboard",
+      href: "/Admin",
+      icon: "pi pi-home",
+    },
+    {
+      label: "Gestión de Funcionarios",
+      icon: "pi pi-users",
+      submenu: [
+        { label: "Nuevo Funcionario", href: "/Admin/funcionarios/crear" },
+        { label: "Lista de Funcionarios", href: "/Admin/funcionarios" },
+      ],
+    },
+    {
+      label: "Gestión de Usuarios",
+      href: "/Admin/usuarios",
+      icon: "pi pi-user-edit",
+    },
+    {
+      label: "Reportes",
+      href: "/Admin/reportes",
+      icon: "pi pi-chart-bar",
+    },
+    {
+      label: "Configuración",
+      href: "/Admin/configuracion",
+      icon: "pi pi-cog",
+    },
+  ];
+
+  const navItems = isAdmin ? adminNavItems : userNavItems;
 
   const toggleSubmenu = (label: string) => {
     setOpenSubmenu(openSubmenu === label ? null : label);

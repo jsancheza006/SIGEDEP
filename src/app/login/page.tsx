@@ -34,6 +34,24 @@ export default function Login() {
       return;
     }
 
+    // Verificación local de credenciales de admin
+    if (email === "admin@mep.go.cr" && contrasena === "mep123") {
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userRole", "admin");
+      toast.current?.show({
+        severity: "success",
+        summary: "Bienvenido Administrador",
+        detail: "Acceso concedido al panel de administración",
+        life: 2000,
+      });
+      setTimeout(() => {
+        router.push("/Admin");
+      }, 500);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_BASE}login/index.php`, {
         method: "POST",
@@ -46,6 +64,7 @@ export default function Login() {
       if (data.success) {
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("userRole", "user");
         router.push("/dashboard");
       } else {
         toast.current?.show({

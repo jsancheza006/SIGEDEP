@@ -1,28 +1,29 @@
-import type {Metadata} from 'next';
+"use client";
+
 import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import { SidebarProvider } from '../context/SidebarContext';
+import AdminGuard from '../components/AdminGuard';
 
-export const metadata: Metadata = {
-  title: 'Registro de Funcionarios',
-  description: 'Formulario para registrar nuevos funcionarios.',
-};
-
-export default function RootLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body>
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <AdminGuard>
+      <SidebarProvider>
+        <div className="flex">
+          <Sidebar isAdmin={true} />
+          <div className="flex-1 flex flex-col min-h-screen pt-[80px]">
+            <Header />
+            <main className="p-6">{children}</main>
+            <Toaster />
+          </div>
+        </div>
+      </SidebarProvider>
+    </AdminGuard>
   );
 }

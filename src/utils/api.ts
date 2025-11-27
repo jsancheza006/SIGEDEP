@@ -2,5 +2,5 @@
 //export const FILE_BASE = "https://SIGEDEP.mep.go.cr/";
 
 
-export const API_BASE = "http://localhost:82/SIGEDEP-Backend/";
-export const FILE_BASE = "http://localhost:82/SIGEDEP-Backend/";
+export const API_BASE = "http://localhost/SIGEDEP-Backend/";
+export const FILE_BASE = "http://localhost/SIGEDEP-Backend/";
