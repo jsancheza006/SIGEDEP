@@ -60,9 +60,9 @@ export default function Sidebar({ isAdmin = false }: SidebarProps) {
       ],
     },
     {
-      label: "Gestión de Usuarios",
-      href: "/Admin/usuarios",
-      icon: "pi pi-user-edit",
+      label: "Gestión de Datos",
+      href: "/Admin/datos",
+      icon: "pi pi-database",
     },
     {
       label: "Reportes",
