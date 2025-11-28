@@ -25,12 +25,12 @@ export default function AdminDashboard() {
       color: "bg-blue-950",
     },
     {
-      title: "Gestión de Usuarios",
-      description: "Administrar usuarios y permisos del sistema",
-      icon: "pi pi-user-edit",
-      route: "/Admin/usuarios",
-      color: "bg-black",
-      disabled: true,
+      title: "Gestión de Datos",
+      description: "Administrar catálogos y parámetros del sistema",
+      icon: "pi pi-database",
+      route: "/Admin/datos",
+      color: "bg-green-950",
+      disabled: false,
     },
     {
       title: "Reportes y Estadísticas",
