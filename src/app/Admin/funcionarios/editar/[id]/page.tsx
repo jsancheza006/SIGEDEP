@@ -176,10 +176,10 @@ function EditarFuncionarioForm({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen px-4">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Cargando datos del funcionario...</p>
+          <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600"></div>
+          <p className="mt-3 text-sm sm:text-base text-gray-600">Cargando datos del funcionario...</p>
         </div>
       </div>
     );
@@ -188,7 +188,7 @@ function EditarFuncionarioForm({ id }: { id: string }) {
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
-        <CardTitle className="text-2xl">
+        <CardTitle className="text-xl sm:text-2xl">
           Editar Funcionario
         </CardTitle>
         <CardDescription>
@@ -353,18 +353,24 @@ function EditarFuncionarioForm({ id }: { id: string }) {
               </div>
             </div>
 
-            <div className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/Admin/funcionarios")}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                <Save className="mr-2 h-4 w-4" />
-                {isSubmitting ? "Guardando..." : "Guardar Cambios"}
-              </Button>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+              <div className="w-full sm:w-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                  onClick={() => router.push("/Admin/funcionarios")}
+                >
+                  Cancelar
+                </Button>
+              </div>
+
+              <div className="w-full sm:w-auto">
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                  <Save className="mr-2 h-4 w-4" />
+                  {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+                </Button>
+              </div>
             </div>
           </form>
         </Form>
@@ -378,10 +384,10 @@ export default function EditarFuncionarioPage() {
   const id = params.id as string;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start bg-gray-50 p-8">
-      <div className="w-full max-w-4xl mb-6">
-        <a 
-          href="/Admin/funcionarios" 
+    <main className="flex min-h-screen flex-col items-center justify-start bg-gray-50 p-4 sm:p-6 md:p-8">
+      <div className="w-full max-w-4xl mb-6 px-2 sm:px-0">
+        <a
+          href="/Admin/funcionarios"
           className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold mb-4"
         >
           <i className="pi pi-arrow-left mr-2"></i>

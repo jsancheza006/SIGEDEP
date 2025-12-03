@@ -134,20 +134,20 @@ export default function ListaFuncionarios() {
   };
 
   const header = (
-    <div className="flex flex-wrap gap-2 align-items-center justify-between">
-      <h2 className="text-2xl font-bold text-[#172951]">Lista de Funcionarios</h2>
-      <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2 items-center justify-between">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#172951]">Lista de Funcionarios</h2>
+      <div className="flex flex-col sm:flex-row gap-2 items-stretch">
         <InputText
           type="search"
           placeholder="Buscar..."
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
-          className="w-full md:w-80"
+          className="w-full sm:w-80"
         />
         <Button
           label="Nuevo Funcionario"
           icon="pi pi-plus"
-          className="p-button-success"
+          className="p-button-success w-full sm:w-auto"
           onClick={() => router.push("/Admin/funcionarios/crear")}
         />
       </div>
@@ -155,84 +155,86 @@ export default function ListaFuncionarios() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6">
+    <div className="min-h-screen bg-gray-50 px-4 sm:px-6 md:px-8 py-4">
       <Toast ref={toast} />
       <ConfirmDialog />
 
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumb y título */}
-        <div className="mb-6">
+        <div className="mb-6 px-2 sm:px-0">
           <Button
             icon="pi pi-arrow-left"
             label="Volver al Dashboard"
             className="p-button-text p-button-plain mb-4"
             onClick={() => router.push("/Admin")}
           />
-          <h1 className="text-4xl font-bold text-[#172951] mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#172951] mb-2">
             Gestión de Funcionarios
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm sm:text-base">
             Administra los funcionarios registrados en el sistema
           </p>
         </div>
 
         {/* Tabla de Funcionarios */}
         <Card className="shadow-lg">
-          <DataTable
-            value={funcionarios}
-            loading={loading}
-            paginator
-            rows={10}
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            dataKey="ID_Funcionario"
-            globalFilter={globalFilter}
-            header={header}
-            emptyMessage="No se encontraron funcionarios."
-            className="custom-table"
-            stripedRows
-            responsiveLayout="scroll"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} funcionarios"
-          >
-            <Column
-              field="ID_Funcionario"
-              header="ID"
-              sortable
-              style={{ minWidth: "80px" }}
-            />
-            <Column
-              header="Nombre Completo"
-              body={nombreCompletoTemplate}
-              sortable
-              sortField="Nombre"
-              style={{ minWidth: "200px" }}
-            />
-            <Column
-              field="Correo"
-              header="Correo Electrónico"
-              sortable
-              style={{ minWidth: "250px" }}
-            />
-            <Column
-              field="Rol"
-              header="Rol"
-              body={rolTemplate}
-              sortable
-              style={{ minWidth: "160px" }}
-            />
-            <Column
-              field="Numero"
-              header="Teléfono"
-              sortable
-              style={{ minWidth: "120px" }}
-            />
-            <Column
-              header="Acciones"
-              body={accionesTemplate}
-              exportable={false}
-              style={{ minWidth: "150px", textAlign: "center" }}
-            />
-          </DataTable>
+          <div className="overflow-auto">
+            <DataTable
+              value={funcionarios}
+              loading={loading}
+              paginator
+              rows={10}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              dataKey="ID_Funcionario"
+              globalFilter={globalFilter}
+              header={header}
+              emptyMessage="No se encontraron funcionarios."
+              className="custom-table"
+              stripedRows
+              responsiveLayout="stack"
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} funcionarios"
+            >
+              <Column
+                field="ID_Funcionario"
+                header="ID"
+                sortable
+                style={{ minWidth: "60px" }}
+              />
+              <Column
+                header="Nombre Completo"
+                body={nombreCompletoTemplate}
+                sortable
+                sortField="Nombre"
+                style={{ minWidth: "160px" }}
+              />
+              <Column
+                field="Correo"
+                header="Correo Electrónico"
+                sortable
+                style={{ minWidth: "180px" }}
+              />
+              <Column
+                field="Rol"
+                header="Rol"
+                body={rolTemplate}
+                sortable
+                style={{ minWidth: "100px" }}
+              />
+              <Column
+                field="Numero"
+                header="Teléfono"
+                sortable
+                style={{ minWidth: "100px" }}
+              />
+              <Column
+                header="Acciones"
+                body={accionesTemplate}
+                exportable={false}
+                style={{ minWidth: "120px", textAlign: "center" }}
+              />
+            </DataTable>
+          </div>
         </Card>
 
         {/* Estadísticas rápidas */}
