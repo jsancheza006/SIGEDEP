@@ -34,23 +34,8 @@ export default function Login() {
       return;
     }
 
-    // Verificación local de credenciales de admin
-    if (email === "admin@mep.go.cr" && contrasena === "mep123") {
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userRole", "admin");
-      toast.current?.show({
-        severity: "success",
-        summary: "Bienvenido Administrador",
-        detail: "Acceso concedido al panel de administración",
-        life: 2000,
-      });
-      setTimeout(() => {
-        router.push("/Admin");
-      }, 500);
-      setLoading(false);
-      return;
-    }
+    // Nota: la validación de roles se realiza en el backend. El frontend
+    // solo respeta el rol devuelto por el servidor (Admin o Funcionario).
 
     try {
       const response = await fetch(`${API_BASE}login/index.php`, {
@@ -60,12 +45,32 @@ export default function Login() {
       });
 
       const data = await response.json();
+      console.log("[Login] response data:", data);
 
       if (data.success) {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userRole", "user");
-        router.push("/dashboard");
+        // Leer rol devuelto. El backend devuelve el rol dentro de `user.rol`.
+        const roleRaw = data.user?.rol ?? data.user?.role ?? data.rol ?? data.role ?? data.Rol ?? data.roleName ?? data.Role ?? data.RolUsuario ?? null;
+        console.log("[Login] roleRaw:", roleRaw);
+        const role = roleRaw ? String(roleRaw).toLowerCase() : null;
+
+        if (role === "admin" || role === "administrador") {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("userEmail", email);
+          localStorage.setItem("userRole", "admin");
+          router.push("/Admin");
+        } else if (role === "funcionario" || role === "user" || role === "usuario") {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("userEmail", email);
+          localStorage.setItem("userRole", "funcionario");
+          router.push("/dashboard");
+        } else {
+          toast.current?.show({
+            severity: "error",
+            summary: "Acceso denegado",
+            detail: "No tiene un rol válido (Admin o Funcionario).",
+            life: 4000,
+          });
+        }
       } else {
         toast.current?.show({
           severity: "error",

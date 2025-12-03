@@ -44,6 +44,7 @@ const funcionarioSchema = z.object({
   correo: z.string().email("Correo electrónico inválido"),
   telefono: z.string().min(1, "Teléfono es requerido"),
   contrasena: z.string().optional(),
+  rol: z.enum(["Admin", "Funcionario"]).optional(),
 });
 
 type FuncionarioFormValues = z.infer<typeof funcionarioSchema>;
@@ -61,6 +62,7 @@ function EditarFuncionarioForm({ id }: { id: string }) {
       apellidos: "",
       correo: "",
       telefono: "",
+      rol: "Funcionario",
       contrasena: "",
     },
   });
@@ -82,6 +84,7 @@ function EditarFuncionarioForm({ id }: { id: string }) {
           apellidos: data.Apellido,
           correo: data.Correo,
           telefono: String(data.Numero),
+          rol: data.Rol || data.rol || "Funcionario",
           contrasena: "",
         });
       } else {
@@ -118,6 +121,11 @@ function EditarFuncionarioForm({ id }: { id: string }) {
       // Solo incluir contraseña si se proporcionó una nueva
       if (data.contrasena && data.contrasena.length > 0) {
         payload.Contrasena = data.contrasena;
+      }
+
+      // Incluir Rol (permite cambiar rol desde el formulario de edición)
+      if (data.rol) {
+        payload.Rol = data.rol;
       }
 
       const response = await fetch(`${API_BASE}Funcionario/index.php?id=${id}`, {
@@ -299,27 +307,50 @@ function EditarFuncionarioForm({ id }: { id: string }) {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="contrasena"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nueva Contraseña (opcional)</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="password"
-                          placeholder="Dejar en blanco para mantener la actual"
-                          {...field}
-                          className="pl-10"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="md:col-span-1">
+                  <FormField
+                    control={form.control}
+                    name="rol"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rol</FormLabel>
+                        <FormControl>
+                          <select {...field} className="w-full p-2 border border-gray-300 rounded-lg">
+                            <option value="Funcionario">Funcionario</option>
+                            <option value="Admin">Admin</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="contrasena"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nueva Contraseña (opcional)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              type="password"
+                              placeholder="Dejar en blanco para mantener la actual"
+                              {...field}
+                              className="pl-10"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-between">

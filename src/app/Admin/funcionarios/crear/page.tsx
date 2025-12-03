@@ -40,6 +40,7 @@ const funcionarioSchema = z.object({
   correo: z.string().email("Correo electrónico inválido"),
   telefono: z.string().min(1, "Teléfono es requerido"),
   contrasena: z.string().min(6, "Contraseña debe tener al menos 6 caracteres"),
+  rol: z.enum(["Admin", "Funcionario"]).optional(),
 });
 
 type FuncionarioFormValues = z.infer<typeof funcionarioSchema>;
@@ -54,7 +55,8 @@ function FormularioFuncionario() {
       nombre: "",
       apellidos: "",
       correo: "",
-      telefono: "",
+        telefono: "",
+        rol: "Funcionario",
       contrasena: "",
     },
   });
@@ -70,6 +72,7 @@ function FormularioFuncionario() {
         Correo: data.correo,
         Numero: data.telefono,
         Contrasena: data.contrasena,
+        Rol: data.rol, 
       };
 
       const response = await fetch(`${API_BASE}Funcionario/index.php`, {
@@ -240,27 +243,50 @@ function FormularioFuncionario() {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="contrasena"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contraseña</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="password"
-                          placeholder="********"
-                          {...field}
-                          className="pl-10"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="md:col-span-1">
+                  <FormField
+                    control={form.control}
+                    name="rol"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rol</FormLabel>
+                        <FormControl>
+                          <select {...field} className="w-full p-2 border border-gray-300 rounded-lg">
+                            <option value="Funcionario">Funcionario</option>
+                            <option value="Admin">Admin</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="contrasena"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Contraseña</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              type="password"
+                              placeholder="********"
+                              {...field}
+                              className="pl-10"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end">

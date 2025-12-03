@@ -19,6 +19,7 @@ interface Funcionario {
   Correo: string;
   Numero: string;
   Contrasena: string;
+  Rol?: string;
 }
 
 export default function ListaFuncionarios() {
@@ -127,6 +128,11 @@ export default function ListaFuncionarios() {
     return `${rowData.Nombre} ${rowData.Apellido}`;
   };
 
+  const rolTemplate = (rowData: Funcionario) => {
+    // accept several possible field names returned by the API
+    return rowData.Rol ?? (rowData as any).rol ?? (rowData as any).role ?? "—";
+  };
+
   const header = (
     <div className="flex flex-wrap gap-2 align-items-center justify-between">
       <h2 className="text-2xl font-bold text-[#172951]">Lista de Funcionarios</h2>
@@ -206,6 +212,13 @@ export default function ListaFuncionarios() {
               header="Correo Electrónico"
               sortable
               style={{ minWidth: "250px" }}
+            />
+            <Column
+              field="Rol"
+              header="Rol"
+              body={rolTemplate}
+              sortable
+              style={{ minWidth: "160px" }}
             />
             <Column
               field="Numero"
